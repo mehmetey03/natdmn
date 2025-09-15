@@ -3,10 +3,8 @@ on:
   schedule:
     - cron: '*/30 * * * *'
   workflow_dispatch:
-
 permissions:
   contents: write
-
 jobs:
   check-and-update-domain:
     runs-on: ubuntu-latest
@@ -16,20 +14,17 @@ jobs:
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
-
     - name: Install requests
       run: pip install requests
-
     - name: Smart Domain Check and Update
       id: domain_check
       run: |
         # Mevcut domaini al veya varsayılanı kullan
-        if [ -f "dominn.txt" ]; then
+        if [ -f "domain.txt" ]; then
           CURRENT_DOMAIN=$(grep -o 'guncel_domain=.*' domain.txt | cut -d'=' -f2)
           echo "Mevcut domain: $CURRENT_DOMAIN"
         else
@@ -37,11 +32,9 @@ jobs:
           echo "Yeni domain.txt oluşturuluyor: $CURRENT_DOMAIN"
           echo "guncel_domain=$CURRENT_DOMAIN" > domain.txt
         fi
-
         # Domain numarasını al
         DOMAIN_NUMBER=$(echo $CURRENT_DOMAIN | grep -o '[0-9]\+')
         echo "Başlangıç domain numarası: $DOMAIN_NUMBER"
-
         # Akıllı domain kontrolü için Python scripti
         python3 -c "
         import requests
@@ -101,12 +94,11 @@ jobs:
         
         print(f'Seçilen domain: {selected_domain}')
         "
-
     - name: Commit and push changes
       run: |
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
-        git add dominn.txt
+        git add domain.txt  # Düzeltme yapıldı: dominn.txt yerine domain.txt
         
         # Değişiklik varsa commit et
         if git diff --staged --quiet; then
