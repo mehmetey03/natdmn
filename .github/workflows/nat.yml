@@ -29,11 +29,11 @@ jobs:
       id: domain_check
       run: |
         # Mevcut domaini al veya varsayılanı kullan
-        if [ -f "domain.txt" ]; then
+        if [ -f "dominn.txt" ]; then
           CURRENT_DOMAIN=$(grep -o 'guncel_domain=.*' domain.txt | cut -d'=' -f2)
           echo "Mevcut domain: $CURRENT_DOMAIN"
         else
-          CURRENT_DOMAIN="https://inattv.xyz/"
+          CURRENT_DOMAIN="https://inattv1118.xyz/"
           echo "Yeni domain.txt oluşturuluyor: $CURRENT_DOMAIN"
           echo "guncel_domain=$CURRENT_DOMAIN" > domain.txt
         fi
